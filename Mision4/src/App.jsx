@@ -1,98 +1,88 @@
-import { useState, useEffect } from "react";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { crearUsuario } from "./api.js";
 
-// 1. Esquema de validación
+// Esquema de validación
 const esquema = z.object({
-  nombre: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
-  email: z.email("Introduce un correo electrónico válido")
+    nombre: z.string().min(4, "El nombre debe tener más de 3 caracteres"),
+    correo: z.email("Introduce un correo electrónico válido")
 });
 
 function App() {
 
-  // 2. Configuración del formulario
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting }
-  } = useForm({
-    resolver: zodResolver(esquema)
-  });
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+        reset
+    } = useForm({
+        resolver: zodResolver(esquema)
+    });
 
-  // 3. Estados de la aplicación
-  const [registrado, setRegistrado] = useState(false);
-  const [mensaje, setMensaje] = useState("");
+    async function onSubmit(datos) {
+        try {
+            const usuarioCreado = await crearUsuario(datos);
 
-  // 4. Función que se ejecuta al enviar el formulario
-  async function onSubmit(datos) {
-    setMensaje("");
+            console.log("Usuario creado:", usuarioCreado);
 
-    try {
-      const respuesta = await fetch("/api/registro", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(datos)
-      });
+            alert("Usuario registrado correctamente");
 
-      const resultado = await respuesta.json();
+            reset();
 
-      if (!respuesta.ok) {
-        throw new Error(resultado.mensaje);
-      }
+        } catch (error) {
+            console.error(error);
 
-      setMensaje(resultado.mensaje);
-      setRegistrado(true);
-
-    } catch (error) {
-      setMensaje(error.message);
-      setRegistrado(false);
+            alert("Error al registrar el usuario");
+        }
     }
-  }
 
-  return (
-    <main>
-      <h1>Registro de usuarios</h1>
+    return (
+        <main>
+            <h1>Registro de usuario</h1>
 
-      {!registrado && (
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <form onSubmit={handleSubmit(onSubmit)} noValidate>
 
-          <label htmlFor="nombre">Nombre:</label>
-          <input
-            id="nombre"
-            {...register("nombre")}
-            aria-invalid={!!errors.nombre}
-          />
+                <label htmlFor="nombre">
+                    Nombre:
+                </label>
 
-          {errors.nombre && (
-            <p role="alert">{errors.nombre.message}</p>
-          )}
+                <input
+                    id="nombre"
+                    type="text"
+                    {...register("nombre")}
+                />
 
-          <label htmlFor="email">Correo electrónico:</label>
-          <input
-            id="email"
-            type="email"
-            {...register("email")}
-            aria-invalid={!!errors.email}
-          />
+                {errors.nombre && (
+                    <p role="alert">
+                        {errors.nombre.message}
+                    </p>
+                )}
 
-          {errors.email && (
-            <p role="alert">{errors.email.message}</p>
-          )}
+                <label htmlFor="correo">
+                    Correo electrónico:
+                </label>
 
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Enviando..." : "Submit"}
-          </button>
+                <input
+                    id="correo"
+                    type="email"
+                    {...register("correo")}
+                />
 
-        </form>
-      )}
+                {errors.correo && (
+                    <p role="alert">
+                        {errors.correo.message}
+                    </p>
+                )}
 
-      <p role="status">{mensaje}</p>
+                <button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? "Guardando..." : "Registrar"}
+                </button>
 
-    </main>
-  );
+            </form>
+        </main>
+    );
 }
 
 export default App;
