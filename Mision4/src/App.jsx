@@ -6,8 +6,8 @@ import {obtenerPersonas, obtenerFusiones, buscarUsuario, crearUsuario, actualiza
 import "./App.css";
 
 const schema = z.object({
-    nombre: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
-    correo: z.string().email("Introduce un correo válido")
+    nombre: z.string().trim().min(2, "El nombre debe tener al menos 2 caracteres"),
+    correo: z.string().trim().pipe(z.email("Introduce un correo válido"))
 });
 
 const ELEMENTOS = [
@@ -42,7 +42,8 @@ const NOMBRES_AFINIDADES = {
     resist: "Resiste",
     null: "Anula",
     repel: "Refleja",
-    absorb: "Absorbe"
+    absorb: "Absorbe",
+    block: "Bloquea"
 };
 
 const CLASES_AFINIDADES = {
@@ -51,7 +52,8 @@ const CLASES_AFINIDADES = {
     resist: "resist",
     null: "null",
     repel: "repel",
-    absorb: "absorb"
+    absorb: "absorb",
+    block: "Bloquea"
 };
 
 const IMAGENES_ELEMENTOS = {
@@ -285,14 +287,14 @@ function App() {
 
                             <label htmlFor="nombre">Nombre</label>
 
-                            <input id="nombre" type="text" {...register("nombre")}/>
-                            {errors.nombre && (<p className="error">{errors.nombre.message}</p>)}
+                            <input id="nombre" type="text" aria-invalid={errors.nombre ? "true" : "false"} aria-describedby={errors.nombre ? "error-nombre" : undefined}{...register("nombre")}/>
+                            {errors.nombre && (<p id="error-nombre" className="error" role="alert">{errors.nombre.message}</p>)}
                         </div>
                         <div className="campo">
                             <label htmlFor="correo">Correo electrónico</label>
 
-                            <input id="correo" type="email" {...register("correo")}/>
-                            {errors.correo && (<p className="error">{errors.correo.message}</p>)}
+                            <input id="correo" type="email" aria-invalid={errors.correo ? "true" : "false"} aria-describedby={errors.correo ? "error-correo" : undefined}{...register("correo")}/>
+                            {errors.correo && (<p id="error-correo" className="error" role="alert">{errors.correo.message}</p>)}
                         </div>
                         <button type="submit">Continuar</button>
                     </form>
