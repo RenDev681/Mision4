@@ -38,14 +38,6 @@
     color: black;
 }
 
-.tabla-fusiones td:hover {
-    background-color: #ffcccc;
-}
-
-.tabla-fusiones td:has(> *) {
-    color: black;
-}
-
 
 
 .imagen-elemento {
@@ -54,4 +46,51 @@
     object-fit: contain;
     display: block;
     margin: auto;
+}
+
+
+
+.tabla-afinidades {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 15px;
+}
+
+.tabla-afinidades table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.tabla-afinidades th,
+.tabla-afinidades td {
+    text-align: center;
+    padding: 6px 2px;
+}
+
+.imagen-elemento {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.tabla-afinidades td .afinidad {
+    display: block;
+    font-size: 11px;
+    padding: 5px 2px;
+}
+
+
+.persona-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.persona-header h3,
+.persona-header p {
+    margin: 0;
 }

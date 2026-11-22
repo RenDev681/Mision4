@@ -6,7 +6,7 @@ import {obtenerPersonas, obtenerFusiones, buscarUsuario, crearUsuario, actualiza
 import "./App.css";
 
 const schema = z.object({
-    nombre: z.string().min(4, "El nombre debe tener al menos 4 caracteres"),
+    nombre: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
     correo: z.string().email("Introduce un correo válido")
 });
 
@@ -55,15 +55,15 @@ const CLASES_AFINIDADES = {
 };
 
 const IMAGENES_ELEMENTOS = {
-    physical: "/assets/physical.png",
-    gun: "/assets/gun.png",
-    fire: "/assets/fire.png",
-    ice: "/assets/ice.png",
-    electric: "/assets/electric.png",
-    wind: "/assets/wind.png",
-    psy: "/assets/psy.png",
-    nuclear: "/assets/nuclear.png",
-    bless: "/assets/bless.png",
+    physical: "/src/assets/physical.png",
+    gun: "/src/assets/gun.png",
+    fire: "/src/assets/fire.png",
+    ice: "/src/assets/ice.png",
+    electric: "/src/assets/electric.png",
+    wind: "/src/assets/wind.png",
+    psy: "/src/assets/psy.png",
+    nuclear: "/src/assets/nuclear.png",
+    bless: "/src/assets/bless.png",
     curse: "/src/assets/curse.png"
 };
 
@@ -90,36 +90,28 @@ function App() {
     useEffect(() => {
     async function cargarDatos() {
 
-        try {
+        try{
 
             setCargando(true);
-
             setError("");
 
-            // Cargar Personas
             const datosPersonas = await obtenerPersonas();
 
             setPersonas(datosPersonas);
 
-            // Cargar fusiones
             const datosFusiones = await obtenerFusiones();
 
             setFusiones(datosFusiones);
 
-        } catch (error) {
+        }catch (error){
 
             setError("No se han podido cargar las Personas o las fusiones");
-
             console.error(error);
 
         } finally {
-
             setCargando(false);
-
         }
-
     }
-
     cargarDatos();
 
 }, []);
@@ -127,54 +119,26 @@ function App() {
     useEffect(() => {
 
         if (busqueda.trim() === "") {
-
             setResultados([]);
-
             return;
-
         }
-
 
         const coincidencias = personas.filter((persona) => {
 
             return (
-
-                persona.nombre.toLowerCase().includes(
-                    busqueda.toLowerCase()
-                )
-
-                ||
-
-                persona.Arcana.toLowerCase().includes(
-                    busqueda.toLowerCase()
-                )
-
+                persona.nombre.toLowerCase().includes(busqueda.toLowerCase())||persona.Arcana.toLowerCase().includes(busqueda.toLowerCase())
             );
-
         });
 
-
         setResultados(coincidencias.slice(0, 10));
-
-
     }, [busqueda, personas]);
-
-
-    // Añadir Persona al equipo
 
     function agregarPersona(persona) {
 
-
-        // Comprobar que no haya 6 Personas
-
         if (equipo.length >= 6) {
-
             setError("El equipo ya tiene 6 Personas");
-
             return;
-
         }
-
         const yaExiste = equipo.some(
             (p) => p.id === persona.id
         );
@@ -183,18 +147,10 @@ function App() {
         if (yaExiste) {
 
             setError("Esta Persona ya está en tu equipo");
-
             return;
-
         }
 
-        setEquipo((equipoActual) => [
-
-            ...equipoActual,
-
-            persona
-
-        ]);
+        setEquipo((equipoActual) => [...equipoActual, persona]);
 
         setBusqueda("");
         setResultados([]);
@@ -207,15 +163,10 @@ function App() {
 
         setEquipo((equipoActual) =>
 
-            equipoActual.filter(
-                (persona) => persona.id !== id
-            )
-
+            equipoActual.filter((persona) => persona.id !== id)
         );
-
     }
 
-    // Buscar la fusion entre dos Personas
     function buscarFusion(persona1, persona2) {
 
         const fusionEncontrada = fusiones.find((fusion) => {
@@ -239,163 +190,105 @@ function App() {
     function mostrarAfinidades(persona) {
 
         return (
-
             <div className="tabla-afinidades">
-
                 <h4>Afinidades</h4>
-
                 <table>
-
                     <thead>
-
                         <tr>
-                            <th>Elemento</th>
-                            <th>Afinidad</th>
+                            {ELEMENTOS.map((elemento) => (
+                                <th key={elemento}>
+                                    <img
+                                        src={IMAGENES_ELEMENTOS[elemento]}
+                                        alt={NOMBRES_ELEMENTOS[elemento]}
+                                        className="imagen-elemento"
+                                        title={NOMBRES_ELEMENTOS[elemento]}
+                                    />
+                                </th>
+                            ))}
                         </tr>
                     </thead>
                     <tbody>
-                        {ELEMENTOS.map((elemento) => {
-                            const afinidad =
-                                persona.afinidades[elemento];
-                            const clase =
-                                CLASES_AFINIDADES[afinidad];
-                            return (
-                                <tr key={elemento}>
-                                    <td>
-                                        <img src={IMAGENES_ELEMENTOS[elemento]} alt={NOMBRES_ELEMENTOS[elemento]} className="imagen-elemento"/>
-                                    </td>
-                                    <td>
-                                        <span className={`afinidad ${clase}`}>
+                        <tr>
+                            {ELEMENTOS.map((elemento) => {
+                                const afinidad =
+                                    persona.afinidades[elemento];
 
+                                const clase =
+                                    CLASES_AFINIDADES[afinidad];
+
+                                return (
+                                    <td key={elemento}>
+
+                                        <span className={`afinidad ${clase}`}>
                                             {NOMBRES_AFINIDADES[afinidad]}
                                         </span>
                                     </td>
-                                </tr>
-                            );
-                        })}
+                                );
+                            })}
+                        </tr>
                     </tbody>
                 </table>
             </div>
         );
     }
 
-
-    // Guardar equipo
-
     async function guardarEquipo() {
 
-
-        // Comprobar que el equipo tenga 6 Personas
-
-        if (equipo.length !== 6) {
+        if(equipo.length !== 6){
 
             setError("Debes seleccionar exactamente 6 Personas");
-
             return;
-
         }
 
-
-        try {
+        try{
 
 
             setGuardando(true);
-
             setError("");
-
             setMensaje();
-
-
-            // Buscar si el usuario ya existe
 
             const usuarioEncontrado = await buscarUsuario(
 
                 usuario.nombre,
-
                 usuario.correo
-
             );
-
-
-            // Crear objeto del usuario
 
             const datosUsuario = {
 
                 nombre: usuario.nombre,
-
                 correo: usuario.correo,
-
                 equipo: equipo
-
             };
-
-
-            // Si existe, actualizarlo
 
             if (usuarioEncontrado) {
 
-
-                await actualizarUsuario({
-
-                    ...usuarioEncontrado,
-
-                    ...datosUsuario
-
-                });
-
-
+                await actualizarUsuario({...usuarioEncontrado,...datosUsuario});
                 setMensaje("¡Tu equipo ha sido actualizado!");
-
-
-            }
-
-
-            // Si no existe, crearlo
-
-            else {
-
+            }else {
 
                 await crearUsuario(datosUsuario);
-
-
                 setMensaje("¡Tu equipo ha sido guardado!");
-
-
             }
+        }catch(error){
 
 
-        } catch (error) {
-
-
-            setError("No se ha podido guardar el equipo");
-
+            setError("No se pudo guardar el equipo");
             console.error(error);
-
-
-        } finally {
-
-
+        }finally{
             setGuardando(false);
-
-
         }
-
     }
     return (
 
         <main className="container">
             <h1>Constructor de equipo P5</h1>
 
-            {!usuario ? (
-
+            {!usuario?(
                 <section className="formulario">
-
 
                     <h2>Registro de usuario</h2>
 
-
                     <form onSubmit={handleSubmit((datos) => {setUsuario(datos);})}>
-
                         <div className="campo">
 
                             <label htmlFor="nombre">Nombre</label>
