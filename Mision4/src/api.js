@@ -1,16 +1,14 @@
 const API_URL = "http://localhost:3000";
 
-// Obtener todas las Personas
+//Funcion para obtener las Personas
 export async function obtenerPersonas() {
 
+    //Llamamos a la Api
     const respuesta = await fetch(`${API_URL}/Personas`);
-
     if (!respuesta.ok) {
         throw new Error(`Error HTTP: ${respuesta.status}`);
     }
-
     const datos = await respuesta.json();
-
     return datos;
 }
 
