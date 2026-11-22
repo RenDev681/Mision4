@@ -109,6 +109,23 @@
       }
     }
   ],
+   "fusiones": [
+    {
+      "persona1": "1",
+      "persona2": "3",
+      "resultado": "Berith"
+    },
+    {
+      "persona1": "1",
+      "persona2": "2",
+      "resultado": "Agathion"
+    },
+    {
+      "persona1": "2",
+      "persona2": "3",
+      "resultado": "Jack-o'-Lantern"
+    }
+  ],
   "Usuarios": [
     {
       "nombre": "carlos",

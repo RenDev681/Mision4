@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {obtenerPersonas, buscarUsuario, crearUsuario, actualizarUsuario} from "./api";
+import {obtenerPersonas, obtenerFusiones, buscarUsuario, crearUsuario, actualizarUsuario} from "./api";
 import "./App.css";
 
 const schema = z.object({
@@ -54,11 +54,24 @@ const CLASES_AFINIDADES = {
     absorb: "absorb"
 };
 
+const IMAGENES_ELEMENTOS = {
+    physical: "/assets/physical.png",
+    gun: "/assets/gun.png",
+    fire: "/assets/fire.png",
+    ice: "/assets/ice.png",
+    electric: "/assets/electric.png",
+    wind: "/assets/wind.png",
+    psy: "/assets/psy.png",
+    nuclear: "/assets/nuclear.png",
+    bless: "/assets/bless.png",
+    curse: "/src/assets/curse.png"
+};
 
 function App() {
 
     const [usuario, setUsuario] = useState(null);
     const [personas, setPersonas] = useState([]);
+    const [fusiones, setFusiones] = useState([]);
     const [busqueda, setBusqueda] = useState("");
     const [resultados, setResultados] = useState([]);
     const [equipo, setEquipo] = useState([]);
@@ -75,35 +88,41 @@ function App() {
     });
 
     useEffect(() => {
-        async function cargarPersonas() {
+    async function cargarDatos() {
 
-            try {
+        try {
 
-                setCargando(true);
+            setCargando(true);
 
-                setError("");
+            setError("");
 
-                const datos = await obtenerPersonas();
+            // Cargar Personas
+            const datosPersonas = await obtenerPersonas();
 
-                setPersonas(datos);
+            setPersonas(datosPersonas);
 
-            } catch (error) {
+            // Cargar fusiones
+            const datosFusiones = await obtenerFusiones();
 
-                setError("No se han podido cargar las Personas");
+            setFusiones(datosFusiones);
 
-                console.error(error);
+        } catch (error) {
 
-            } finally {
+            setError("No se han podido cargar las Personas o las fusiones");
 
-                setCargando(false);
+            console.error(error);
 
-            }
+        } finally {
+
+            setCargando(false);
 
         }
 
-        cargarPersonas();
+    }
 
-    }, []);
+    cargarDatos();
+
+}, []);
 
     useEffect(() => {
 
@@ -196,6 +215,27 @@ function App() {
 
     }
 
+    // Buscar la fusion entre dos Personas
+    function buscarFusion(persona1, persona2) {
+
+        const fusionEncontrada = fusiones.find((fusion) => {
+
+            const primera = String(fusion.persona1);
+            const segunda = String(fusion.persona2);
+            const idPersona1 = String(persona1.id);
+            const idPersona2 = String(persona2.id);
+
+            return (
+                (primera === idPersona1 && segunda === idPersona2) ||
+                (primera === idPersona2 && segunda === idPersona1)
+            );
+
+        });
+
+        return fusionEncontrada ? fusionEncontrada.resultado : "-";
+
+    }
+
     function mostrarAfinidades(persona) {
 
         return (
@@ -222,7 +262,7 @@ function App() {
                             return (
                                 <tr key={elemento}>
                                     <td>
-                                        {NOMBRES_ELEMENTOS[elemento]}
+                                        <img src={IMAGENES_ELEMENTOS[elemento]} alt={NOMBRES_ELEMENTOS[elemento]} className="imagen-elemento"/>
                                     </td>
                                     <td>
                                         <span className={`afinidad ${clase}`}>
@@ -341,24 +381,12 @@ function App() {
         }
 
     }
-
-
-    // Renderizado
-
     return (
 
-
         <main className="container">
-
-
-            <h1>Persona 5 Team Builder</h1>
-
+            <h1>Constructor de equipo P5</h1>
 
             {!usuario ? (
-
-
-                // FORMULARIO DE USUARIO
-
 
                 <section className="formulario">
 
@@ -366,372 +394,120 @@ function App() {
                     <h2>Registro de usuario</h2>
 
 
-                    <form
-
-                        onSubmit={handleSubmit((datos) => {
-
-                            setUsuario(datos);
-
-                        })}
-
-                    >
-
+                    <form onSubmit={handleSubmit((datos) => {setUsuario(datos);})}>
 
                         <div className="campo">
 
+                            <label htmlFor="nombre">Nombre</label>
 
-                            <label htmlFor="nombre">
-
-                                Nombre
-
-                            </label>
-
-
-                            <input
-
-                                id="nombre"
-
-                                type="text"
-
-                                {...register("nombre")}
-
-                            />
-
-
-                            {errors.nombre && (
-
-                                <p className="error">
-
-                                    {errors.nombre.message}
-
-                                </p>
-
-                            )}
-
-
+                            <input id="nombre" type="text" {...register("nombre")}/>
+                            {errors.nombre && (<p className="error">{errors.nombre.message}</p>)}
                         </div>
-
-
-
                         <div className="campo">
+                            <label htmlFor="correo">Correo electrónico</label>
 
-
-                            <label htmlFor="correo">
-
-                                Correo electrónico
-
-                            </label>
-
-
-                            <input
-
-                                id="correo"
-
-                                type="email"
-
-                                {...register("correo")}
-
-                            />
-
-
-                            {errors.correo && (
-
-                                <p className="error">
-
-                                    {errors.correo.message}
-
-                                </p>
-
-                            )}
-
-
+                            <input id="correo" type="email" {...register("correo")}/>
+                            {errors.correo && (<p className="error">{errors.correo.message}</p>)}
                         </div>
-
-
-
-                        <button type="submit">
-
-                            Continuar
-
-                        </button>
-
-
+                        <button type="submit">Continuar</button>
                     </form>
-
-
                 </section>
-
-
-            ) : (
-
-
-                // CONSTRUCTOR DEL EQUIPO
-
-
+            ):(
                 <section className="constructor">
 
-
-                    <h2>
-
-                        Bienvenido, {usuario.nombre}
-
-                    </h2>
-
-
-                    <p>
-
-                        Selecciona seis Personas para tu equipo.
-
-                    </p>
-
-
-
-                    {/* BUSCADOR */}
-
+                    <h2>Bienvenido, {usuario.nombre}</h2>
+                    <p> Selecciona seis Personas para tu equipo.</p>
 
                     <div className="buscador">
-
-
                         <input
 
-                            type="text"
-
-                            placeholder="Buscar Persona o Arcana..."
-
-                            value={busqueda}
-
+                            type="text" placeholder="Buscar Persona o Arcana..." value={busqueda}
                             onChange={(e) => {
-
                                 setBusqueda(e.target.value);
-
                                 setError("");
-
                             }}
-
                         />
-
 
                     </div>
 
+                    {equipo.length > 1 && (
+                        <div className="tabla-fusiones">
+                            <h2>Tabla de fusiones</h2>
 
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Persona</th>
 
-                    {/* ESTADO DE CARGA */}
+                                        {equipo.map((persona) => (
+                                            <th key={persona.id}>
+                                                {persona.nombre}
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
 
+                                <tbody>
+                                    {equipo.map((persona1) => (
+                                        <tr key={persona1.id}>
+                                            <th>{persona1.nombre}</th>
 
-                    {cargando && (
-
-                        <p>
-
-                            Cargando Personas...
-
-                        </p>
-
+                                            {equipo.map((persona2) => (
+                                                <td key={persona2.id}>
+                                                    {String(persona1.id) === String(persona2.id)? "-": buscarFusion(persona1, persona2)}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     )}
 
-
-
-                    {/* RESULTADOS DE BÚSQUEDA */}
-
+                    {cargando && (<p> Cargando Personas y fusiones...</p>)}
 
                     {resultados.length > 0 && (
 
-
                         <div className="resultados">
-
-
                             {resultados.map((persona) => (
 
-
-                                <button
-
-                                    type="button"
-
-                                    key={persona.id}
-
-                                    onClick={() => agregarPersona(persona)}
-
-                                    className="resultado"
-
-                                >
-
-
-                                    <span>
-
-                                        {persona.nombre}
-
-                                    </span>
-
-
-                                    <span>
-
-                                        {persona.Arcana}
-
-                                    </span>
-
-
+                                <button type="button" key={persona.id} onClick={() => agregarPersona(persona)} className="resultado">
+                                    <span>{persona.nombre}</span>
                                 </button>
-
-
                             ))}
-
-
                         </div>
-
-
                     )}
 
-
-
-                    {/* EQUIPO SELECCIONADO */}
-
-
-                    <h3>
-
-                        Equipo: {equipo.length}/6
-
-                    </h3>
-
-
+                    <h3>Equipo: {equipo.length}/6</h3>
 
                     <div className="equipo-grid">
 
-
                         {equipo.map((persona) => (
 
-
-                            <article
-
-                                className="persona-card"
-
-                                key={persona.id}
-
-                            >
-
-
-                                {/* INFORMACIÓN DE PERSONA */}
-
+                            <article className="persona-card" key={persona.id}>
 
                                 <div className="persona-header">
 
+                                    <h3>{persona.nombre}</h3>
 
-                                    <h3>
+                                    <p>Arcana: {persona.Arcana}</p>
 
-                                        {persona.nombre}
-
-                                    </h3>
-
-
-                                    <p>
-
-                                        Arcana: {persona.Arcana}
-
-                                    </p>
-
-
-                                    <button
-
-                                        type="button"
-
-                                        onClick={() => eliminarPersona(persona.id)}
-
-                                    >
-
-                                        Eliminar
-
-                                    </button>
-
-
+                                    <button type="button" onClick={() => eliminarPersona(persona.id)}>Eliminar</button>
                                 </div>
-
-
-
-                                {/* MATRIZ DE AFINIDADES */}
-
-
+                                
                                 {mostrarAfinidades(persona)}
-
-
                             </article>
-
-
                         ))}
-
-
                     </div>
 
-
-
-                    {/* ERRORES */}
-
-
-                    {error && (
-
-
-                        <p className="error">
-
-                            {error}
-
-                        </p>
-
-
-                    )}
-
-
-
-                    {/* MENSAJES */}
-
-
-                    {mensaje && (
-
-
-                        <p className="mensaje">
-
-                            {mensaje}
-
-                        </p>
-
-
-                    )}
-
-
-
-                    {/* BOTÓN DE GUARDADO */}
-
-
-                    <button
-
-                        type="button"
-
-                        onClick={guardarEquipo}
-
-                        disabled={guardando || equipo.length !== 6}
-
-                    >
-
-
-                        {guardando
-
-                            ? "Guardando..."
-
-                            : "Guardar equipo"}
-
-
+                    {error && (<p className="error">{error}</p>)}
+                    {mensaje && (<p className="mensaje">{mensaje}</p>)}
+                    <button type="button"onClick={guardarEquipo}disabled={guardando || equipo.length !== 6}>
+                        {guardando? "Guardando...": "Guardar equipo"}
                     </button>
-
-
                 </section>
-
-
             )}
-
-
         </main>
-
-
     );
-
-
 }
-
-
 export default App;

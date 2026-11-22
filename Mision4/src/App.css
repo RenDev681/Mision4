@@ -1,0 +1,57 @@
+.tabla-fusiones {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    overflow-x: auto;
+}
+
+.tabla-fusiones h2 {
+    margin-bottom: 15px;
+    color: white;
+}
+
+.tabla-fusiones table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.tabla-fusiones th,
+.tabla-fusiones td {
+    padding: 12px;
+    border: 2px solid white;
+    text-align: center;
+    font-weight: bold;
+}
+
+.tabla-fusiones thead th {
+    background-color: #e60012;
+    color: white;
+}
+
+.tabla-fusiones tbody th {
+    background-color: #222;
+    color: white;
+}
+
+.tabla-fusiones td {
+    background-color: white;
+    color: black;
+}
+
+.tabla-fusiones td:hover {
+    background-color: #ffcccc;
+}
+
+.tabla-fusiones td:has(> *) {
+    color: black;
+}
+
+
+
+.imagen-elemento {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+    display: block;
+    margin: auto;
+}

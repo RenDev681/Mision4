@@ -82,3 +82,15 @@ export async function actualizarUsuario(usuario) {
 
     return datos;
 }
+
+export async function obtenerFusiones() {
+    const respuesta = await fetch(`${API_URL}/fusiones`);
+
+    if (!respuesta.ok) {
+        throw new Error(`Error HTTP: ${respuesta.status}`);
+    }
+
+    const datos = await respuesta.json();
+
+    return datos;
+}
