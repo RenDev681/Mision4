@@ -17,11 +17,214 @@
         "bless": "weak",
         "curse": "resist"
       }
+    },
+    {
+      "id": "2",
+      "nombre": "Zorro",
+      "Arcana": "Magician",
+      "Inherit": "Wind",
+      "afinidades": {
+        "physical": "normal",
+        "gun": "normal",
+        "fire": "normal",
+        "ice": "normal",
+        "electric": "weak",
+        "wind": "resist",
+        "psy": "normal",
+        "nuclear": "normal",
+        "bless": "normal",
+        "curse": "normal"
+      }
+    },
+    {
+      "id": "3",
+      "nombre": "Pixie",
+      "Arcana": "Lovers",
+      "Inherit": "Electric",
+      "afinidades": {
+        "physical": "normal",
+        "gun": "weak",
+        "fire": "normal",
+        "ice": "weak",
+        "electric": "resist",
+        "wind": "normal",
+        "psy": "normal",
+        "nuclear": "normal",
+        "bless": "resist",
+        "curse": "weak"
+      }
+    },
+    {
+      "id": "4",
+      "nombre": "Jack Frost",
+      "Arcana": "Magician",
+      "Inherit": "Ice",
+      "afinidades": {
+        "physical": "normal",
+        "gun": "normal",
+        "fire": "weak",
+        "ice": "block",
+        "electric": "normal",
+        "wind": "normal",
+        "psy": "normal",
+        "nuclear": "normal",
+        "bless": "normal",
+        "curse": "normal"
+      }
+    },
+    {
+      "id": "5",
+      "nombre": "Mokoi",
+      "Arcana": "Death",
+      "Inherit": "Ailment",
+      "afinidades": {
+        "physical": "normal",
+        "gun": "normal",
+        "fire": "normal",
+        "ice": "normal",
+        "electric": "resist",
+        "wind": "weak",
+        "psy": "normal",
+        "nuclear": "normal",
+        "bless": "normal",
+        "curse": "normal"
+      }
+    },
+    {
+      "id": "6",
+      "nombre": "Jack O'Lantern",
+      "Arcana": "Magician",
+      "Inherit": "Fire",
+      "afinidades": {
+        "physical": "normal",
+        "gun": "weak",
+        "fire": "absorb",
+        "ice": "weak",
+        "electric": "normal",
+        "wind": "weak",
+        "psy": "normal",
+        "nuclear": "normal",
+        "bless": "normal",
+        "curse": "normal"
+      }
     }
   ],
   "Usuarios": [
     {
-        
+      "nombre": "carlos",
+      "correo": "carlos@carlos.com",
+      "equipo": [
+        {
+          "id": "1",
+          "nombre": "Arsene",
+          "Arcana": "Fool",
+          "Inherit": "Curse",
+          "afinidades": {
+            "physical": "normal",
+            "gun": "normal",
+            "fire": "normal",
+            "ice": "weak",
+            "electric": "normal",
+            "wind": "normal",
+            "psy": "normal",
+            "nuclear": "normal",
+            "bless": "weak",
+            "curse": "resist"
+          }
+        },
+        {
+          "id": "2",
+          "nombre": "Zorro",
+          "Arcana": "Magician",
+          "Inherit": "Wind",
+          "afinidades": {
+            "physical": "normal",
+            "gun": "normal",
+            "fire": "normal",
+            "ice": "normal",
+            "electric": "weak",
+            "wind": "resist",
+            "psy": "normal",
+            "nuclear": "normal",
+            "bless": "normal",
+            "curse": "normal"
+          }
+        },
+        {
+          "id": "4",
+          "nombre": "Jack Frost",
+          "Arcana": "Magician",
+          "Inherit": "Ice",
+          "afinidades": {
+            "physical": "normal",
+            "gun": "normal",
+            "fire": "weak",
+            "ice": "block",
+            "electric": "normal",
+            "wind": "normal",
+            "psy": "normal",
+            "nuclear": "normal",
+            "bless": "normal",
+            "curse": "normal"
+          }
+        },
+        {
+          "id": "5",
+          "nombre": "Mokoi",
+          "Arcana": "Death",
+          "Inherit": "Ailment",
+          "afinidades": {
+            "physical": "normal",
+            "gun": "normal",
+            "fire": "normal",
+            "ice": "normal",
+            "electric": "resist",
+            "wind": "weak",
+            "psy": "normal",
+            "nuclear": "normal",
+            "bless": "normal",
+            "curse": "normal"
+          }
+        },
+        {
+          "id": "6",
+          "nombre": "Jack O'Lantern",
+          "Arcana": "Magician",
+          "Inherit": "Fire",
+          "afinidades": {
+            "physical": "normal",
+            "gun": "weak",
+            "fire": "absorb",
+            "ice": "weak",
+            "electric": "normal",
+            "wind": "weak",
+            "psy": "normal",
+            "nuclear": "normal",
+            "bless": "normal",
+            "curse": "normal"
+          }
+        },
+        {
+          "id": "3",
+          "nombre": "Pixie",
+          "Arcana": "Lovers",
+          "Inherit": "Electric",
+          "afinidades": {
+            "physical": "normal",
+            "gun": "weak",
+            "fire": "normal",
+            "ice": "weak",
+            "electric": "resist",
+            "wind": "normal",
+            "psy": "normal",
+            "nuclear": "normal",
+            "bless": "resist",
+            "curse": "weak"
+          }
+        }
+      ],
+      "id": "OE61s55Us8I"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

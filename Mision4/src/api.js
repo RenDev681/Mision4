@@ -28,8 +28,8 @@ export async function buscarUsuario(nombre, correo) {
 
     const usuarioEncontrado = datos.find(
         (usuario) =>
-            usuario.nombre.toLowerCase() === nombre.toLowerCase() &&
-            usuario.correo.toLowerCase() === correo.toLowerCase()
+            usuario.nombre?.toLowerCase() === nombre.toLowerCase() &&
+            usuario.correo?.toLowerCase() === correo.toLowerCase()
     );
 
     return usuarioEncontrado;

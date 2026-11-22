@@ -105,9 +105,6 @@ function App() {
 
     }, []);
 
-
-    // Buscador dinámico
-
     useEffect(() => {
 
         if (busqueda.trim() === "") {
