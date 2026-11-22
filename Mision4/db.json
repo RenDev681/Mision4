@@ -2,7 +2,21 @@
   "Personas": [
     {
       "id": "1",
-      "nombre": "Carlos"
+      "nombre": "Arsene",
+      "Arcana": "Fool",
+      "Inherit": "Curse",
+      "afinidades": {
+        "physical": "normal",
+        "gun": "normal",
+        "fire": "normal",
+        "ice": "weak",
+        "electric": "normal",
+        "wind": "normal",
+        "psy": "normal",
+        "nuclear": "normal",
+        "bless": "weak",
+        "curse": "resist"
+      }
     }
   ],
   "Usuarios": [

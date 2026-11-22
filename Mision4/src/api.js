@@ -1,8 +1,9 @@
-const API_Personas = "http://localhost:3000/Personas";
-const API_Usuarios = "http://localhost:3000/Usuarios";
+const API_URL = "http://localhost:3000";
 
-export async function obtenerPrefecturas() {
-    const respuesta = await fetch(API_Personas);
+// Obtener todas las Personas
+export async function obtenerPersonas() {
+
+    const respuesta = await fetch(`${API_URL}/Personas`);
 
     if (!respuesta.ok) {
         throw new Error(`Error HTTP: ${respuesta.status}`);
@@ -10,32 +11,76 @@ export async function obtenerPrefecturas() {
 
     const datos = await respuesta.json();
 
-    const prefecturas = Array.isArray(datos)
-        ? datos
-        : datos?.data;
-
-    if (!Array.isArray(prefecturas)) {
-        throw new Error("El formato de la respuesta no es válido.");
-    }
-
-    return prefecturas;
+    return datos;
 }
 
 
-export async function crearUsuario(datosUsuario) {
-    const respuesta = await fetch(API_Usuarios, {
+// Buscar un usuario por nombre y correo
+export async function buscarUsuario(nombre, correo) {
+
+    const respuesta = await fetch(`${API_URL}/Usuarios`);
+
+    if (!respuesta.ok) {
+        throw new Error(`Error HTTP: ${respuesta.status}`);
+    }
+
+    const datos = await respuesta.json();
+
+    const usuarioEncontrado = datos.find(
+        (usuario) =>
+            usuario.nombre.toLowerCase() === nombre.toLowerCase() &&
+            usuario.correo.toLowerCase() === correo.toLowerCase()
+    );
+
+    return usuarioEncontrado;
+}
+
+
+// Crear un usuario nuevo
+export async function crearUsuario(usuario) {
+
+    const respuesta = await fetch(`${API_URL}/Usuarios`, {
+
         method: "POST",
+
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(datosUsuario)
+
+        body: JSON.stringify(usuario)
+
     });
 
     if (!respuesta.ok) {
         throw new Error(`Error HTTP: ${respuesta.status}`);
     }
 
-    const usuarioCreado = await respuesta.json();
+    const datos = await respuesta.json();
 
-    return usuarioCreado;
+    return datos;
+}
+
+
+// Actualizar un usuario existente
+export async function actualizarUsuario(usuario) {
+
+    const respuesta = await fetch(`${API_URL}/Usuarios/${usuario.id}`, {
+
+        method: "PUT",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(usuario)
+
+    });
+
+    if (!respuesta.ok) {
+        throw new Error(`Error HTTP: ${respuesta.status}`);
+    }
+
+    const datos = await respuesta.json();
+
+    return datos;
 }
