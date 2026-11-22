@@ -161,10 +161,7 @@ function App() {
 
     function eliminarPersona(id) {
 
-        setEquipo((equipoActual) =>
-
-            equipoActual.filter((persona) => persona.id !== id)
-        );
+        setEquipo((equipoActual) =>equipoActual.filter((persona) => persona.id !== id));
     }
 
     function buscarFusion(persona1, persona2) {
@@ -176,15 +173,10 @@ function App() {
             const idPersona1 = String(persona1.id);
             const idPersona2 = String(persona2.id);
 
-            return (
-                (primera === idPersona1 && segunda === idPersona2) ||
-                (primera === idPersona2 && segunda === idPersona1)
-            );
-
+            return ((primera === idPersona1 && segunda === idPersona2)||(primera === idPersona2 && segunda === idPersona1));
         });
 
         return fusionEncontrada ? fusionEncontrada.resultado : "-";
-
     }
 
     function mostrarAfinidades(persona) {
@@ -323,6 +315,23 @@ function App() {
 
                     </div>
 
+
+                    {cargando && (<p> Cargando Personas y fusiones...</p>)}
+
+                    {resultados.length > 0 && (
+
+                        <div className="resultados">
+                            {resultados.map((persona) => (
+
+                                <button type="button" key={persona.id} onClick={() => agregarPersona(persona)} className="resultado">
+                                    <span>{persona.nombre}</span>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+
+
+
                     {equipo.length > 1 && (
                         <div className="tabla-fusiones">
                             <h2>Tabla de fusiones</h2>
@@ -357,20 +366,7 @@ function App() {
                         </div>
                     )}
 
-                    {cargando && (<p> Cargando Personas y fusiones...</p>)}
-
-                    {resultados.length > 0 && (
-
-                        <div className="resultados">
-                            {resultados.map((persona) => (
-
-                                <button type="button" key={persona.id} onClick={() => agregarPersona(persona)} className="resultado">
-                                    <span>{persona.nombre}</span>
-                                </button>
-                            ))}
-                        </div>
-                    )}
-
+                    
                     <h3>Equipo: {equipo.length}/6</h3>
 
                     <div className="equipo-grid">
@@ -384,7 +380,11 @@ function App() {
                                     <h3>{persona.nombre}</h3>
 
                                     <p>Arcana: {persona.Arcana}</p>
-
+                                    <img
+                                        src={IMAGENES_ELEMENTOS[persona.Inherit]}
+                                        alt={NOMBRES_ELEMENTOS[persona.Inherit]}
+                                        title={NOMBRES_ELEMENTOS[persona.Inherit]}
+                                    />
                                     <button type="button" onClick={() => eliminarPersona(persona.id)}>Eliminar</button>
                                 </div>
                                 
