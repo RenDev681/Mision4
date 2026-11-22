@@ -66,6 +66,7 @@
 .tabla-afinidades td {
     text-align: center;
     padding: 6px 2px;
+    border: 2px solid white;
 }
 
 .imagen-elemento {
@@ -76,7 +77,7 @@
 
 .tabla-afinidades td .afinidad {
     display: block;
-    font-size: 11px;
+    font-size: 17px;
     padding: 5px 2px;
 }
 
